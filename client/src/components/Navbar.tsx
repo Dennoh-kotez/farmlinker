@@ -1,80 +1,223 @@
 import { useState } from "react";
+import { Link, useLocation } from "wouter";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
-import { Menu, X } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Menu, ShoppingCart, LogOut, User, ShoppingBag, Package } from "lucide-react";
 
 export default function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isAuthenticated, user, logout, isSeller } = useAuth();
+  const [, setLocation] = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+  const handleLogout = () => {
+    logout();
+    setLocation("/");
   };
 
-  return (
-    <nav className="bg-white shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <Link href="/" className="flex-shrink-0 flex items-center">
-              <span className="text-primary font-bold text-xl">LaunchPad</span>
-            </Link>
-          </div>
-          <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-8">
-            <a href="#features" className="text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium">
-              Features
-            </a>
-            <a href="#how-it-works" className="text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium">
-              How it Works
-            </a>
-            <a href="#waitlist" className="text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium">
-              Join Waitlist
-            </a>
-          </div>
-          <div className="flex items-center sm:hidden">
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={toggleMenu}
-              aria-expanded={isMenuOpen}
-              aria-controls="mobile-menu"
-            >
-              <span className="sr-only">Open main menu</span>
-              {isMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </Button>
-          </div>
-        </div>
-      </div>
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase();
+  };
 
-      {/* Mobile menu */}
-      <div className={`sm:hidden ${isMenuOpen ? 'block' : 'hidden'}`} id="mobile-menu">
-        <div className="pt-2 pb-3 space-y-1">
-          <a 
-            href="#features" 
-            className="block px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Features
-          </a>
-          <a 
-            href="#how-it-works" 
-            className="block px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            How it Works
-          </a>
-          <a 
-            href="#waitlist" 
-            className="block px-3 py-2 text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Join Waitlist
-          </a>
+  const navItems = [
+    { name: "Home", href: "/" },
+    { name: "Products", href: "/products" },
+    { name: "About", href: "/about" },
+    { name: "Contact", href: "/contact" },
+  ];
+
+  return (
+    <header className="bg-background border-b sticky top-0 z-40">
+      <div className="container mx-auto px-4">
+        <div className="flex h-16 items-center justify-between">
+          <div className="flex items-center">
+            <Link href="/">
+              <span className="text-2xl font-bold text-primary cursor-pointer">FarmLinker</span>
+            </Link>
+            
+            <nav className="ml-10 hidden md:flex items-center space-x-8">
+              {navItems.map((item) => (
+                <Link href={item.href} key={item.name}>
+                  <span className="text-sm font-medium hover:text-primary cursor-pointer">
+                    {item.name}
+                  </span>
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            {/* Cart icon for all users */}
+            <Link href="/cart">
+              <Button variant="ghost" size="icon" className="relative">
+                <ShoppingCart className="h-5 w-5" />
+                <span className="absolute top-0 right-0 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
+                  0
+                </span>
+              </Button>
+            </Link>
+
+            {isAuthenticated ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarFallback>{user?.name ? getInitials(user.name) : "U"}</AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  
+                  <Link href="/dashboard">
+                    <DropdownMenuItem className="cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Dashboard</span>
+                    </DropdownMenuItem>
+                  </Link>
+                  
+                  <Link href="/orders">
+                    <DropdownMenuItem className="cursor-pointer">
+                      <ShoppingBag className="mr-2 h-4 w-4" />
+                      <span>My Orders</span>
+                    </DropdownMenuItem>
+                  </Link>
+                  
+                  {isSeller && (
+                    <Link href="/seller/dashboard">
+                      <DropdownMenuItem className="cursor-pointer">
+                        <Package className="mr-2 h-4 w-4" />
+                        <span>Seller Dashboard</span>
+                      </DropdownMenuItem>
+                    </Link>
+                  )}
+                  
+                  <DropdownMenuSeparator />
+                  
+                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="hidden md:flex space-x-2">
+                <Link href="/login">
+                  <Button variant="outline">Sign in</Button>
+                </Link>
+                <Link href="/register">
+                  <Button>Sign up</Button>
+                </Link>
+              </div>
+            )}
+
+            {/* Mobile menu button */}
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="md:hidden">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right">
+                <SheetHeader className="mb-6">
+                  <SheetTitle>FarmLinker</SheetTitle>
+                </SheetHeader>
+                <div className="flex flex-col space-y-4">
+                  {navItems.map((item) => (
+                    <Link href={item.href} key={item.name}>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {item.name}
+                      </Button>
+                    </Link>
+                  ))}
+                  
+                  {isAuthenticated ? (
+                    <>
+                      <Link href="/dashboard">
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-start"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          <User className="mr-2 h-4 w-4" />
+                          Dashboard
+                        </Button>
+                      </Link>
+                      {isSeller && (
+                        <Link href="/seller/dashboard">
+                          <Button
+                            variant="ghost"
+                            className="w-full justify-start"
+                            onClick={() => setMobileMenuOpen(false)}
+                          >
+                            <Package className="mr-2 h-4 w-4" />
+                            Seller Dashboard
+                          </Button>
+                        </Link>
+                      )}
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start"
+                        onClick={() => {
+                          handleLogout();
+                          setMobileMenuOpen(false);
+                        }}
+                      >
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Log out
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Link href="/login">
+                        <Button 
+                          variant="outline" 
+                          className="w-full"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          Sign in
+                        </Button>
+                      </Link>
+                      <Link href="/register">
+                        <Button 
+                          className="w-full"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          Sign up
+                        </Button>
+                      </Link>
+                    </>
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </div>
-    </nav>
+    </header>
   );
 }

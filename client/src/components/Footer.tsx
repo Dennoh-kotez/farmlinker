@@ -1,111 +1,102 @@
 import { Link } from "wouter";
-import { Twitter, Linkedin } from "lucide-react";
+import { Facebook, Instagram, Twitter, Mail, MapPin, Phone, Leaf } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+  
   return (
-    <footer className="bg-white">
-      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-          <div className="space-y-8 xl:col-span-1">
-            <div className="flex items-center">
-              <Link href="/" className="text-primary font-bold text-xl">
-                LaunchPad
-              </Link>
-            </div>
-            <p className="text-gray-500 text-base">
-              Empowering teams to build better products, faster.
+    <footer className="bg-muted/30 border-t">
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Company Info */}
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-primary">FarmLinker</h2>
+            <p className="text-muted-foreground">
+              Connecting farmers and consumers for fresher food and fairer prices.
             </p>
-            <div className="flex space-x-6">
-              <a href="#" className="text-gray-400 hover:text-gray-500">
-                <span className="sr-only">Twitter</span>
-                <Twitter className="h-6 w-6" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-gray-500">
-                <span className="sr-only">LinkedIn</span>
-                <Linkedin className="h-6 w-6" />
-              </a>
+            <div className="flex space-x-4">
+              <Button variant="ghost" size="icon" aria-label="Facebook">
+                <Facebook className="h-5 w-5" />
+              </Button>
+              <Button variant="ghost" size="icon" aria-label="Instagram">
+                <Instagram className="h-5 w-5" />
+              </Button>
+              <Button variant="ghost" size="icon" aria-label="Twitter">
+                <Twitter className="h-5 w-5" />
+              </Button>
             </div>
           </div>
-          <div className="mt-12 grid grid-cols-2 gap-8 xl:mt-0 xl:col-span-2">
-            <div className="md:grid md:grid-cols-2 md:gap-8">
-              <div>
-                <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">Product</h3>
-                <ul role="list" className="mt-4 space-y-4">
-                  <li>
-                    <a href="#features" className="text-base text-gray-500 hover:text-gray-900">
-                      Features
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#how-it-works" className="text-base text-gray-500 hover:text-gray-900">
-                      How It Works
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-base text-gray-500 hover:text-gray-900">
-                      Pricing
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className="mt-12 md:mt-0">
-                <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">Support</h3>
-                <ul role="list" className="mt-4 space-y-4">
-                  <li>
-                    <a href="#" className="text-base text-gray-500 hover:text-gray-900">
-                      FAQ
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-base text-gray-500 hover:text-gray-900">
-                      Contact
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="md:grid md:grid-cols-2 md:gap-8">
-              <div>
-                <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">Company</h3>
-                <ul role="list" className="mt-4 space-y-4">
-                  <li>
-                    <a href="#" className="text-base text-gray-500 hover:text-gray-900">
-                      About
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-base text-gray-500 hover:text-gray-900">
-                      Blog
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-base text-gray-500 hover:text-gray-900">
-                      Careers
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className="mt-12 md:mt-0">
-                <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">Legal</h3>
-                <ul role="list" className="mt-4 space-y-4">
-                  <li>
-                    <a href="#" className="text-base text-gray-500 hover:text-gray-900">
-                      Privacy
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-base text-gray-500 hover:text-gray-900">
-                      Terms
-                    </a>
-                  </li>
-                </ul>
-              </div>
+          
+          {/* Quick Links */}
+          <div>
+            <h3 className="font-semibold text-lg mb-4">Quick Links</h3>
+            <ul className="space-y-2">
+              {[
+                { name: "Home", href: "/" },
+                { name: "Products", href: "/products" },
+                { name: "About Us", href: "/about" },
+                { name: "Seller Registration", href: "/register?role=seller" },
+                { name: "Terms of Service", href: "/terms" },
+                { name: "Privacy Policy", href: "/privacy" },
+              ].map((link) => (
+                <li key={link.name}>
+                  <Link href={link.href}>
+                    <span className="text-muted-foreground hover:text-primary cursor-pointer">
+                      {link.name}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          
+          {/* Contact */}
+          <div>
+            <h3 className="font-semibold text-lg mb-4">Contact Us</h3>
+            <ul className="space-y-4">
+              <li className="flex items-start">
+                <MapPin className="h-5 w-5 mr-2 text-primary shrink-0 mt-0.5" />
+                <span className="text-muted-foreground">
+                  123 Farm Lane, Rural County, Country
+                </span>
+              </li>
+              <li className="flex items-center">
+                <Phone className="h-5 w-5 mr-2 text-primary shrink-0" />
+                <span className="text-muted-foreground">+1 (555) 123-4567</span>
+              </li>
+              <li className="flex items-center">
+                <Mail className="h-5 w-5 mr-2 text-primary shrink-0" />
+                <span className="text-muted-foreground">contact@farmlinker.com</span>
+              </li>
+            </ul>
+          </div>
+          
+          {/* Newsletter */}
+          <div>
+            <h3 className="font-semibold text-lg mb-4">Subscribe to Our Newsletter</h3>
+            <p className="text-muted-foreground mb-4">
+              Stay updated with our latest products and farming news.
+            </p>
+            <div className="flex flex-col space-y-2">
+              <Input 
+                type="email" 
+                placeholder="Your email address" 
+                className="bg-background"
+              />
+              <Button>
+                Subscribe
+                <Leaf className="ml-2 h-4 w-4" />
+              </Button>
             </div>
           </div>
         </div>
-        <div className="mt-12 border-t border-gray-200 pt-8">
-          <p className="text-base text-gray-400 text-center">
-            &copy; {new Date().getFullYear()} LaunchPad, Inc. All rights reserved.
+        
+        <div className="border-t mt-12 pt-6 text-center text-muted-foreground">
+          <p>&copy; {currentYear} FarmLinker. All rights reserved.</p>
+          <p className="text-sm mt-2">
+            Supporting sustainable farming and connecting communities.
           </p>
         </div>
       </div>
