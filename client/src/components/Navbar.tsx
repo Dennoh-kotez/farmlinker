@@ -20,6 +20,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Menu, ShoppingCart, LogOut, User, ShoppingBag, Package } from "lucide-react";
 import logoImg from "@/assets/logo.png";
+import InstallPWA from "./InstallPWA";
 
 export default function Navbar() {
   const { isAuthenticated, user, logout, isSeller } = useAuth();
@@ -69,6 +70,11 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center space-x-4">
+            {/* Install PWA Button - Desktop only */}
+            <div className="hidden md:block">
+              <InstallPWA />
+            </div>
+            
             {/* Cart icon for all users */}
             <Link href="/cart">
               <Button variant="ghost" size="icon" className="relative">
@@ -167,6 +173,11 @@ export default function Navbar() {
                       </Button>
                     </Link>
                   ))}
+                  
+                  {/* Install PWA Button - Mobile */}
+                  <div className="mb-2">
+                    <InstallPWA />
+                  </div>
                   
                   {isAuthenticated ? (
                     <>

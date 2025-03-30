@@ -5,10 +5,12 @@ const CACHE_NAME = 'farmlinker-cache-v1';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
+  '/offline.html',
   '/manifest.json',
   '/assets/index.css',
   '/assets/index.js',
-  '/assets/logo.png'
+  '/assets/logo.png',
+  '/icons/offline-image.svg'
 ];
 
 // API routes to cache on fetch
@@ -80,6 +82,26 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Check if the request is for a page navigation (HTML)
+  const isNavigationRequest = event.request.mode === 'navigate';
+
+  // Function to get offline fallback
+  const getOfflineFallback = async () => {
+    // If this is a navigation request, return the offline page
+    if (isNavigationRequest) {
+      return caches.match('/offline.html');
+    }
+    
+    // For image requests, you could return a default offline image
+    const url = new URL(event.request.url);
+    if (isImageRequest(url)) {
+      return caches.match('/icons/offline-image.svg').catch(() => null);
+    }
+    
+    // For other resources, just return null
+    return null;
+  };
+
   const strategy = getCacheStrategy(event.request);
 
   switch (strategy) {
@@ -95,9 +117,10 @@ self.addEventListener('fetch', (event) => {
             });
             return response;
           })
-          .catch(() => {
+          .catch(async () => {
             // If network fails, try to get from cache
-            return caches.match(event.request);
+            const cachedResponse = await caches.match(event.request);
+            return cachedResponse || getOfflineFallback();
           })
       );
       break;
@@ -106,13 +129,15 @@ self.addEventListener('fetch', (event) => {
       // Cache first, falling back to network
       event.respondWith(
         caches.match(event.request).then((response) => {
-          return response || fetch(event.request).then((fetchResponse) => {
-            // Store the fetched response in cache
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, fetchResponse.clone());
-            });
-            return fetchResponse;
-          });
+          return response || fetch(event.request)
+            .then((fetchResponse) => {
+              // Store the fetched response in cache
+              caches.open(CACHE_NAME).then((cache) => {
+                cache.put(event.request, fetchResponse.clone());
+              });
+              return fetchResponse;
+            })
+            .catch(() => getOfflineFallback());
         })
       );
       break;
@@ -132,8 +157,8 @@ self.addEventListener('fetch', (event) => {
               return networkResponse;
             })
             .catch(() => {
-              // If network fails completely, still return cached version
-              return cachedResponse;
+              // If network fails completely, still return cached version or offline fallback
+              return cachedResponse || getOfflineFallback();
             });
           
           // Return the cached response immediately, or wait for network if nothing in cache

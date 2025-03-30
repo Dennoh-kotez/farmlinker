@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FarmLinker - Offline Page">
+  <meta name="theme-color" content="#4caf50">
+  <link rel="icon" href="/src/assets/logo.png" type="image/png">
+  <title>FarmLinker - You are offline</title>
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    .container {
+      text-align: center;
+      max-width: 500px;
+      padding: 2rem;
+    }
+    .logo {
+      width: 150px;
+      height: auto;
+      margin-bottom: 2rem;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #2e7d32;
+    }
+    p {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+    .button {
+      display: inline-block;
+      background-color: #4caf50;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.375rem;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+    .button:hover {
+      background-color: #388e3c;
+    }
+    .icon {
+      margin-bottom: 1.5rem;
+      font-size: 4rem;
+      color: #4caf50;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">📡</div>
+    <h1>You're Offline</h1>
+    <p>It looks like you've lost your internet connection. Please check your network and try again.</p>
+    <p>FarmLinker requires an internet connection to access new content, but you can still access previously viewed pages while offline.</p>
+    <a href="/" class="button">Try Again</a>
+  </div>
+
+  <script>
+    // Listen for online status changes
+    window.addEventListener('online', () => {
+      window.location.reload();
+    });
+
+    document.querySelector('.button').addEventListener('click', (e) => {
+      if (navigator.onLine) {
+        window.location.href = '/';
+      } else {
+        e.preventDefault();
+        alert('You are still offline. Please check your connection and try again.');
+      }
+    });
+  </script>
+</body>
+</html>
