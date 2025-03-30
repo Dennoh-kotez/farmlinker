@@ -14,9 +14,9 @@ export default function Footer() {
           {/* Company Info */}
           <div className="space-y-4">
             <Link href="/">
-              <div className="flex items-center">
-                <img src={logoImg} alt="FarmLinker Logo" className="h-10 w-auto mr-2" />
-                <h2 className="text-2xl font-bold text-primary">FarmLinker</h2>
+              <div className="flex flex-col items-center md:items-start">
+                <img src={logoImg} alt="FarmLinker Logo" className="h-20 w-auto mb-2" />
+                <h2 className="text-xl font-bold text-primary mt-2">FarmLinker</h2>
               </div>
             </Link>
             <p className="text-muted-foreground">
