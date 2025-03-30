@@ -73,6 +73,131 @@ export class MemStorage implements IStorage {
     this.orderItemIdCounter = 1;
     this.reviewIdCounter = 1;
     this.cartIdCounter = 1;
+    
+    // Add sample users
+    this.initializeData();
+  }
+  
+  // Initialize with sample data
+  private initializeData() {
+    // Create sample users
+    const sampleUsers = [
+      {
+        name: "John Farmer",
+        email: "seller@example.com",
+        password: "password",
+        role: "seller",
+        phone: "+254712345678",
+        address: "123 Farm Road",
+        county: "nairobi",
+        idNumber: "12345678",
+        mpesaNumber: "+254712345678"
+      },
+      {
+        name: "Mary Buyer",
+        email: "buyer@example.com",
+        password: "password",
+        role: "buyer",
+        phone: "+254787654321",
+        address: "456 Market Street",
+        county: "mombasa",
+        idNumber: "87654321",
+        mpesaNumber: "+254787654321"
+      },
+      {
+        name: "Sam Both",
+        email: "both@example.com",
+        password: "password",
+        role: "both",
+        phone: "+254723456789",
+        address: "789 Commerce Avenue",
+        county: "kisumu",
+        idNumber: "23456789",
+        mpesaNumber: "+254723456789"
+      }
+    ];
+    
+    sampleUsers.forEach(user => {
+      const id = this.userIdCounter++;
+      const now = new Date();
+      this.users.set(id, {
+        id,
+        ...user,
+        createdAt: now
+      });
+    });
+    
+    // Create sample products for the seller user
+    const sellerId = 1; // John Farmer
+    const sampleProducts = [
+      {
+        name: "Fresh Tomatoes",
+        description: "Organic, locally grown tomatoes from Nairobi region",
+        category: "vegetables",
+        price: 150.00,
+        quantity: 50,
+        unit: "kg",
+        imageUrl: "/uploads/7b39efc0-6d1b-4499-b382-81b72c7676f5.jpeg",
+        sellerId,
+        available: true,
+        location: "Nairobi Outskirts Farm",
+        county: "nairobi",
+        organic: true
+      },
+      {
+        name: "Fresh Milk",
+        description: "Pure cow's milk from grass-fed cattle in Kiambu",
+        category: "dairy",
+        price: 80.00,
+        quantity: 100,
+        unit: "liter",
+        imageUrl: "/uploads/31a30550-f174-449e-ad49-61b1309a4198.jpeg",
+        sellerId,
+        available: true,
+        location: "Kiambu Dairy Farm",
+        county: "kiambu",
+        organic: true
+      },
+      {
+        name: "Avocados",
+        description: "Large Hass avocados from Nakuru",
+        category: "fruits",
+        price: 25.00,
+        quantity: 200,
+        unit: "piece",
+        imageUrl: "/uploads/0fbcd262-07c5-4921-897f-bcded2264da2.jpeg",
+        sellerId,
+        available: true,
+        location: "Nakuru Heights Farm",
+        county: "nakuru",
+        organic: false
+      },
+      {
+        name: "Maize Flour",
+        description: "Stone-ground maize flour from Kitale",
+        category: "grains",
+        price: 120.00,
+        quantity: 75,
+        unit: "kg",
+        imageUrl: "/uploads/d4eca0c0-e046-4fdc-80cd-3ac8e82519f8.jpeg",
+        sellerId,
+        available: true,
+        location: "Kitale Grain Milling",
+        county: "trans-nzoia",
+        organic: false
+      }
+    ];
+    
+    sampleProducts.forEach(product => {
+      const id = this.productIdCounter++;
+      const now = new Date();
+      this.products.set(id, {
+        id,
+        ...product,
+        createdAt: now,
+        updatedAt: now
+      });
+    });
   }
 
   // User operations

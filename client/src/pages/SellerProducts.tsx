@@ -22,17 +22,19 @@ import { Product, insertProductSchema } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 
 // Extended schema for product form with client-side validation
-const productFormSchema = insertProductSchema.extend({
-  price: z.coerce.number().positive("Price must be a positive number"),
-  quantity: z.coerce.number().int().positive("Quantity must be a positive integer"),
-  
-  // Handle nullable fields
-  imageUrl: z.string().optional().transform(val => val || ""),
-  county: z.string().optional().transform(val => val || ""),
-  location: z.string().optional().transform(val => val || ""),
-  organic: z.boolean().optional().transform(val => val === null ? false : val),
-  available: z.boolean().optional().transform(val => val === null ? true : val),
-});
+const productFormSchema = insertProductSchema
+  .omit({ sellerId: true }) // Remove sellerId from client-side validation as it will be added in the mutation
+  .extend({
+    price: z.coerce.number().positive("Price must be a positive number"),
+    quantity: z.coerce.number().int().positive("Quantity must be a positive integer"),
+    
+    // Handle nullable fields
+    imageUrl: z.string().optional().transform(val => val || ""),
+    county: z.string().optional().transform(val => val || ""),
+    location: z.string().optional().transform(val => val || ""),
+    organic: z.boolean().optional().transform(val => val === null ? false : val),
+    available: z.boolean().optional().transform(val => val === null ? true : val),
+  });
 
 type ProductFormValues = z.infer<typeof productFormSchema>;
 
