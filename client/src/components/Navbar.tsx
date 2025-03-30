@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Menu, ShoppingCart, LogOut, User, ShoppingBag, Package } from "lucide-react";
+import logoImg from "@/assets/logo.png";
 
 export default function Navbar() {
   const { isAuthenticated, user, logout, isSeller } = useAuth();
@@ -51,7 +52,10 @@ export default function Navbar() {
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
             <Link href="/">
-              <span className="text-2xl font-bold text-primary cursor-pointer">FarmLinker</span>
+              <div className="flex items-center">
+                <img src={logoImg} alt="FarmLinker Logo" className="h-10 w-auto mr-2" />
+                <span className="text-2xl font-bold text-primary cursor-pointer">FarmLinker</span>
+              </div>
             </Link>
             
             <nav className="ml-10 hidden md:flex items-center space-x-8">
@@ -148,7 +152,10 @@ export default function Navbar() {
               </SheetTrigger>
               <SheetContent side="right">
                 <SheetHeader className="mb-6">
-                  <SheetTitle>FarmLinker</SheetTitle>
+                  <SheetTitle className="flex items-center">
+                    <img src={logoImg} alt="FarmLinker Logo" className="h-8 w-auto mr-2" />
+                    <span>FarmLinker</span>
+                  </SheetTitle>
                 </SheetHeader>
                 <div className="flex flex-col space-y-4">
                   {navItems.map((item) => (

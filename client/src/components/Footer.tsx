@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Facebook, Instagram, Twitter, Mail, MapPin, Phone, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import logoImg from "@/assets/logo.png";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -12,7 +13,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-primary">FarmLinker</h2>
+            <Link href="/">
+              <div className="flex items-center">
+                <img src={logoImg} alt="FarmLinker Logo" className="h-10 w-auto mr-2" />
+                <h2 className="text-2xl font-bold text-primary">FarmLinker</h2>
+              </div>
+            </Link>
             <p className="text-muted-foreground">
               Connecting farmers and consumers for fresher food and fairer prices.
             </p>
