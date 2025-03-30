@@ -48,9 +48,15 @@ export default function SellerProducts() {
   const { data, isLoading } = useQuery({
     queryKey: ["/api/products/seller"],
     queryFn: async () => {
-      const response = await apiRequest("/api/products/seller");
+      console.log("Fetching seller products with user ID:", user?.id);
+      const response = await apiRequest("/api/products/seller", {
+        headers: {
+          "user-id": String(user?.id), // Add user-id header for authentication
+        }
+      });
       return (response as any) as Product[];
     },
+    enabled: !!user?.id, // Only run query when user ID is available
   });
   
   const products = data || [];
@@ -58,10 +64,13 @@ export default function SellerProducts() {
   // Add new product mutation
   const addProductMutation = useMutation({
     mutationFn: async (product: ProductFormValues) => {
+      console.log("Starting mutation with product data:", product);
+      // Ensure user ID is included in headers for authentication
       return await apiRequest("/api/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "user-id": String(user?.id), // Add user-id header for authentication
         },
         body: JSON.stringify({
           ...product,
@@ -89,10 +98,12 @@ export default function SellerProducts() {
   // Edit product mutation
   const editProductMutation = useMutation({
     mutationFn: async ({ id, data }: { id: number; data: Partial<Product> }) => {
+      console.log("Editing product:", id, data);
       return await apiRequest(`/api/products/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          "user-id": String(user?.id), // Add user-id header for authentication
         },
         body: JSON.stringify(data),
       });
@@ -118,8 +129,12 @@ export default function SellerProducts() {
   // Delete product mutation
   const deleteProductMutation = useMutation({
     mutationFn: async (id: number) => {
+      console.log("Deleting product:", id);
       return await apiRequest(`/api/products/${id}`, {
         method: "DELETE",
+        headers: {
+          "user-id": String(user?.id), // Add user-id header for authentication
+        }
       });
     },
     onSuccess: () => {
@@ -176,6 +191,8 @@ export default function SellerProducts() {
 
   // Handle adding new product
   const onAddSubmit = (values: ProductFormValues) => {
+    console.log("Form submission values:", values);
+    console.log("Form validation errors:", addForm.formState.errors);
     addProductMutation.mutate(values);
   };
 
@@ -546,7 +563,17 @@ export default function SellerProducts() {
                     </div>
                     
                     <DialogFooter>
-                      <Button type="submit" disabled={addProductMutation.isPending}>
+                      <Button 
+                        type="submit" 
+                        disabled={addProductMutation.isPending}
+                        onClick={(e) => {
+                          // Add debug info
+                          console.log("Add Product button clicked", e);
+                          console.log("Form is valid:", addForm.formState.isValid);
+                          console.log("Form values:", addForm.getValues());
+                          console.log("Form errors:", addForm.formState.errors);
+                        }}
+                      >
                         {addProductMutation.isPending ? "Adding..." : "Add Product"}
                       </Button>
                     </DialogFooter>

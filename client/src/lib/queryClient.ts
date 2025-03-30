@@ -11,8 +11,26 @@ export async function apiRequest(
   url: string,
   options?: RequestInit
 ): Promise<Response> {
+  // Get the user ID from localStorage if available
+  let headers = options?.headers || {};
+  try {
+    const storedUser = localStorage.getItem("farmlinker_user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      if (user && user.id) {
+        headers = {
+          ...headers,
+          "user-id": String(user.id),
+        };
+      }
+    }
+  } catch (error) {
+    console.error("Error reading user data for authentication header:", error);
+  }
+
   const res = await fetch(url, {
     ...options,
+    headers,
     credentials: "include",
   });
 
@@ -25,8 +43,23 @@ export const getQueryFn: <T>(options: {
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
+    // Add user authentication header if available
+    const headers: Record<string, string> = {};
+    try {
+      const storedUser = localStorage.getItem("farmlinker_user");
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        if (user && user.id) {
+          headers["user-id"] = String(user.id);
+        }
+      }
+    } catch (error) {
+      console.error("Error reading user data for authentication header:", error);
+    }
+
     const res = await fetch(queryKey[0] as string, {
       credentials: "include",
+      headers,
     });
 
     if (unauthorizedBehavior === "returnNull" && res.status === 401) {
