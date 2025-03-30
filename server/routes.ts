@@ -6,6 +6,10 @@ import {
   insertOrderSchema, insertOrderItemSchema, insertReviewSchema
 } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
+import multer from "multer";
+import { v4 as uuidv4 } from "uuid";
+import path from "path";
+import fs from "fs";
 
 // Middleware to verify if user is authenticated 
 const requireAuth = (req: Request, res: Response, next: any) => {
@@ -45,8 +49,47 @@ const requireSeller = async (req: Request, res: Response, next: any) => {
   }
 };
 
+// Set up multer storage for file uploads
+const storage_config = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadDir = path.join(process.cwd(), 'uploads');
+    // Create directory if it doesn't exist
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    // Generate unique filename with original extension
+    const ext = path.extname(file.originalname);
+    const uniqueFilename = `${uuidv4()}${ext}`;
+    cb(null, uniqueFilename);
+  },
+});
+
+// File filter to only allow images
+const fileFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+  // Accept only images
+  if (file.mimetype.startsWith('image/')) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+const upload = multer({ 
+  storage: storage_config,
+  fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB
+  }
+});
+
 export async function registerRoutes(app: Express): Promise<Server> {
   const apiRouter = express.Router();
+  
+  // Serve static files from uploads directory
+  app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
   // Auth Routes
   apiRouter.post("/login", async (req, res) => {
@@ -153,6 +196,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       res.status(500).json({ 
         message: "Failed to fetch products",
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  apiRouter.get("/products/seller", requireSeller, async (req, res) => {
+    try {
+      const sellerId = Number(req.headers['user-id']);
+      const products = await storage.getProductsBySeller(sellerId);
+      res.json(products);
+    } catch (error) {
+      res.status(500).json({ 
+        message: "Failed to fetch seller products",
         error: error instanceof Error ? error.message : "Unknown error"
       });
     }
@@ -425,6 +481,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       res.status(500).json({ 
         message: "Failed to create review",
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // File Upload Route
+  apiRouter.post("/upload", requireSeller, upload.single('image'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded or invalid file type" });
+      }
+      
+      const imageUrl = `/uploads/${req.file.filename}`;
+      
+      res.status(201).json({ 
+        message: "File uploaded successfully", 
+        imageUrl 
+      });
+    } catch (error) {
+      res.status(500).json({ 
+        message: "Failed to upload file",
         error: error instanceof Error ? error.message : "Unknown error"
       });
     }

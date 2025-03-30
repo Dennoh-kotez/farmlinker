@@ -25,6 +25,13 @@ import { useToast } from "@/hooks/use-toast";
 const productFormSchema = insertProductSchema.extend({
   price: z.coerce.number().positive("Price must be a positive number"),
   quantity: z.coerce.number().int().positive("Quantity must be a positive integer"),
+  
+  // Handle nullable fields
+  imageUrl: z.string().optional().transform(val => val || ""),
+  county: z.string().optional().transform(val => val || ""),
+  location: z.string().optional().transform(val => val || ""),
+  organic: z.boolean().optional().transform(val => val === null ? false : val),
+  available: z.boolean().optional().transform(val => val === null ? true : val),
 });
 
 type ProductFormValues = z.infer<typeof productFormSchema>;
@@ -362,12 +369,84 @@ export default function SellerProducts() {
                       name="imageUrl"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Image URL</FormLabel>
-                          <FormControl>
-                            <Input placeholder="https://example.com/image.jpg" {...field} />
-                          </FormControl>
+                          <FormLabel>Product Image</FormLabel>
+                          <div className="space-y-4">
+                            <FormControl>
+                              <Input placeholder="Image URL" {...field} />
+                            </FormControl>
+                            
+                            <div className="flex items-center gap-4">
+                              <div className="relative flex-1">
+                                <Input 
+                                  type="file" 
+                                  accept="image/*"
+                                  className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                                  onChange={async (e) => {
+                                    const file = e.target.files?.[0];
+                                    if (!file) return;
+                                    
+                                    // Create FormData
+                                    const formData = new FormData();
+                                    formData.append('image', file);
+                                    
+                                    try {
+                                      // Upload the image
+                                      const response = await fetch('/api/upload', {
+                                        method: 'POST',
+                                        headers: {
+                                          'user-id': String(user?.id)
+                                        },
+                                        body: formData
+                                      });
+                                      
+                                      if (!response.ok) {
+                                        throw new Error('Upload failed');
+                                      }
+                                      
+                                      const data = await response.json();
+                                      
+                                      // Set the imageUrl field
+                                      field.onChange(data.imageUrl);
+                                      
+                                      toast({
+                                        title: "Upload successful",
+                                        description: "Image has been uploaded and added to the product",
+                                      });
+                                    } catch (error) {
+                                      toast({
+                                        title: "Upload failed",
+                                        description: "Failed to upload image. Please try again.",
+                                        variant: "destructive",
+                                      });
+                                    }
+                                  }}
+                                />
+                                <Button 
+                                  type="button" 
+                                  variant="outline" 
+                                  className="w-full relative z-0"
+                                >
+                                  <Plus className="mr-2 h-4 w-4" />
+                                  Upload Image
+                                </Button>
+                              </div>
+                              {field.value && (
+                                <div className="h-20 w-20 overflow-hidden rounded-md border">
+                                  <img 
+                                    src={field.value} 
+                                    alt="Product preview" 
+                                    className="h-full w-full object-cover"
+                                    onError={(e) => {
+                                      // Handle broken image
+                                      e.currentTarget.src = 'https://placehold.co/80x80?text=No+Image';
+                                    }}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          </div>
                           <FormDescription>
-                            Enter a URL for your product image
+                            Enter a URL or upload an image for your product
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -722,12 +801,84 @@ export default function SellerProducts() {
                   name="imageUrl"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Image URL</FormLabel>
-                      <FormControl>
-                        <Input placeholder="https://example.com/image.jpg" {...field} />
-                      </FormControl>
+                      <FormLabel>Product Image</FormLabel>
+                      <div className="space-y-4">
+                        <FormControl>
+                          <Input placeholder="Image URL" {...field} />
+                        </FormControl>
+                        
+                        <div className="flex items-center gap-4">
+                          <div className="relative flex-1">
+                            <Input 
+                              type="file" 
+                              accept="image/*"
+                              className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                if (!file) return;
+                                
+                                // Create FormData
+                                const formData = new FormData();
+                                formData.append('image', file);
+                                
+                                try {
+                                  // Upload the image
+                                  const response = await fetch('/api/upload', {
+                                    method: 'POST',
+                                    headers: {
+                                      'user-id': String(user?.id)
+                                    },
+                                    body: formData
+                                  });
+                                  
+                                  if (!response.ok) {
+                                    throw new Error('Upload failed');
+                                  }
+                                  
+                                  const data = await response.json();
+                                  
+                                  // Set the imageUrl field
+                                  field.onChange(data.imageUrl);
+                                  
+                                  toast({
+                                    title: "Upload successful",
+                                    description: "Image has been uploaded and added to the product",
+                                  });
+                                } catch (error) {
+                                  toast({
+                                    title: "Upload failed",
+                                    description: "Failed to upload image. Please try again.",
+                                    variant: "destructive",
+                                  });
+                                }
+                              }}
+                            />
+                            <Button 
+                              type="button" 
+                              variant="outline" 
+                              className="w-full relative z-0"
+                            >
+                              <Plus className="mr-2 h-4 w-4" />
+                              Update Image
+                            </Button>
+                          </div>
+                          {field.value && (
+                            <div className="h-20 w-20 overflow-hidden rounded-md border">
+                              <img 
+                                src={field.value} 
+                                alt="Product preview" 
+                                className="h-full w-full object-cover"
+                                onError={(e) => {
+                                  // Handle broken image
+                                  e.currentTarget.src = 'https://placehold.co/80x80?text=No+Image';
+                                }}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
                       <FormDescription>
-                        Enter a URL for your product image
+                        Enter a URL or upload an image for your product
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
