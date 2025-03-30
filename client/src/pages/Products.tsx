@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Leaf, Search, Filter, ShoppingCart } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { Product } from "@shared/schema";
+import { ProductGridSkeleton } from "@/components/ui/skeleton";
 
 export default function Products() {
   const { user } = useAuth();
@@ -119,9 +120,7 @@ export default function Products() {
 
         {/* Products Grid */}
         {isLoading ? (
-          <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-          </div>
+          <ProductGridSkeleton count={8} />
         ) : filteredProducts && filteredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {filteredProducts.map((product) => (

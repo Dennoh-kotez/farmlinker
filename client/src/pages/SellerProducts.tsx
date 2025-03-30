@@ -20,6 +20,7 @@ import { Leaf, Pencil, Trash2, Plus, Package, Tag, Edit, AlertTriangle } from "l
 import { apiRequest } from "@/lib/queryClient";
 import { Product, insertProductSchema } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
+import { ProductGridSkeleton } from "@/components/ui/skeleton";
 
 // Extended schema for product form with client-side validation
 const productFormSchema = insertProductSchema
@@ -601,9 +602,7 @@ export default function SellerProducts() {
 
         {/* List of Products */}
         {isLoading ? (
-          <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-          </div>
+          <ProductGridSkeleton count={8} />
         ) : products && products.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {products.map((product) => (
