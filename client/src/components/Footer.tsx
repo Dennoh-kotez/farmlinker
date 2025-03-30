@@ -15,8 +15,8 @@ export default function Footer() {
           <div className="space-y-4">
             <Link href="/">
               <div className="flex items-center">
-                <img src={logoImg} alt="KilimoConnect Logo" className="h-16 w-auto mr-2" />
-                <h2 className="text-2xl font-bold text-primary">KilimoConnect</h2>
+                <img src={logoImg} alt="FarmLinker Logo" className="h-10 w-auto mr-2" />
+                <h2 className="text-2xl font-bold text-primary">FarmLinker</h2>
               </div>
             </Link>
             <p className="text-muted-foreground">
@@ -74,7 +74,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 mr-2 text-primary shrink-0" />
-                <span className="text-muted-foreground">contact@kilimoconnect.com</span>
+                <span className="text-muted-foreground">contact@farmlinker.com</span>
               </li>
             </ul>
           </div>
@@ -100,7 +100,7 @@ export default function Footer() {
         </div>
         
         <div className="border-t mt-12 pt-6 text-center text-muted-foreground">
-          <p>&copy; {currentYear} KilimoConnect. All rights reserved.</p>
+          <p>&copy; {currentYear} FarmLinker. All rights reserved.</p>
           <p className="text-sm mt-2">
             Supporting sustainable farming and connecting communities.
           </p>
