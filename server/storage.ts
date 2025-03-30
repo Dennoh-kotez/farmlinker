@@ -99,6 +99,9 @@ export class MemStorage implements IStorage {
       role: insertUser.role || 'buyer',
       phone: insertUser.phone || null,
       address: insertUser.address || null,
+      county: insertUser.county || null,
+      idNumber: insertUser.idNumber || null,
+      mpesaNumber: insertUser.mpesaNumber || null,
       createdAt: now
     };
     this.users.set(id, user);
@@ -152,6 +155,9 @@ export class MemStorage implements IStorage {
       imageUrl: insertProduct.imageUrl || null,
       sellerId: insertProduct.sellerId,
       available: insertProduct.available !== undefined ? insertProduct.available : true,
+      location: insertProduct.location || null,
+      county: insertProduct.county || null,
+      organic: insertProduct.organic !== undefined ? insertProduct.organic : false,
       createdAt: now,
       updatedAt: now
     };
@@ -199,7 +205,10 @@ export class MemStorage implements IStorage {
       status: insertOrder.status || 'pending',
       totalAmount: insertOrder.totalAmount,
       shippingAddress: insertOrder.shippingAddress,
+      county: insertOrder.county,
       paymentMethod: insertOrder.paymentMethod,
+      mpesaReceiptNumber: insertOrder.mpesaReceiptNumber || null,
+      deliveryNotes: insertOrder.deliveryNotes || null,
       createdAt: now,
       updatedAt: now
     };

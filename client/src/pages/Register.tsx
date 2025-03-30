@@ -40,8 +40,18 @@ const formSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z.string().min(6, "Password must be at least 6 characters"),
   role: z.enum(["buyer", "seller", "both"]),
-  phone: z.string().min(10, "Phone number must be at least 10 digits").optional(),
+  phone: z.string()
+    .min(10, "Phone number must be at least 10 digits")
+    .regex(/^(?:\+254|0)[17]\d{8}$/, "Please enter a valid Kenyan phone number (e.g., +254712345678 or 0712345678)")
+    .optional(),
+  mpesaNumber: z.string()
+    .regex(/^(?:\+254|0)[17]\d{8}$/, "Please enter a valid M-Pesa number (e.g., +254712345678 or 0712345678)")
+    .optional(),
   address: z.string().min(5, "Address must be at least 5 characters").optional(),
+  county: z.string().optional(),
+  idNumber: z.string()
+    .regex(/^\d{8}$/, "Please enter a valid Kenyan ID number (8 digits)")
+    .optional(),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match",
   path: ["confirmPassword"],
@@ -64,7 +74,10 @@ export default function Register() {
       confirmPassword: "",
       role: "buyer",
       phone: "",
+      mpesaNumber: "",
       address: "",
+      county: "",
+      idNumber: "",
     },
   });
 
@@ -184,19 +197,88 @@ export default function Register() {
                 )}
               />
               
+              {/* Kenya-specific fields for all users */}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Phone Number</FormLabel>
+                      <FormControl>
+                        <Input placeholder="0712345678 or +254712345678" {...field} />
+                      </FormControl>
+                      <FormDescription>
+                        Kenyan phone number for communication
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="county"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>County</FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select your county" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="nairobi">Nairobi</SelectItem>
+                          <SelectItem value="mombasa">Mombasa</SelectItem>
+                          <SelectItem value="kisumu">Kisumu</SelectItem>
+                          <SelectItem value="nakuru">Nakuru</SelectItem>
+                          <SelectItem value="eldoret">Eldoret</SelectItem>
+                          <SelectItem value="kiambu">Kiambu</SelectItem>
+                          <SelectItem value="machakos">Machakos</SelectItem>
+                          <SelectItem value="nyeri">Nyeri</SelectItem>
+                          <SelectItem value="kakamega">Kakamega</SelectItem>
+                          <SelectItem value="kisii">Kisii</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              
+              {/* Additional fields for sellers */}
               {(role === "seller" || role === "both") && (
                 <>
                   <FormField
                     control={form.control}
-                    name="phone"
+                    name="idNumber"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Phone Number</FormLabel>
+                        <FormLabel>ID Number</FormLabel>
                         <FormControl>
-                          <Input placeholder="+1 (555) 123-4567" {...field} />
+                          <Input placeholder="12345678" {...field} />
                         </FormControl>
                         <FormDescription>
-                          Required for seller accounts for buyer communication
+                          Your 8-digit Kenyan ID number (required for sellers)
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="mpesaNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>M-Pesa Number</FormLabel>
+                        <FormControl>
+                          <Input placeholder="0712345678 or +254712345678" {...field} />
+                        </FormControl>
+                        <FormDescription>
+                          M-Pesa number for receiving payments
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -210,10 +292,10 @@ export default function Register() {
                       <FormItem>
                         <FormLabel>Farm Address</FormLabel>
                         <FormControl>
-                          <Input placeholder="123 Farm Road, City, State" {...field} />
+                          <Input placeholder="Farm/Business location" {...field} />
                         </FormControl>
                         <FormDescription>
-                          Required for seller accounts for product sourcing information
+                          Detailed address of your farm or business
                         </FormDescription>
                         <FormMessage />
                       </FormItem>

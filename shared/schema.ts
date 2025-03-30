@@ -11,6 +11,9 @@ export const users = pgTable("users", {
   role: text("role").notNull().default("buyer"), // buyer, seller, or both
   phone: text("phone"),
   address: text("address"),
+  county: text("county"), // Kenyan county (e.g., Nairobi, Mombasa, Kisumu)
+  idNumber: text("id_number"), // Kenyan ID number
+  mpesaNumber: text("mpesa_number"), // M-Pesa phone number
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -20,12 +23,15 @@ export const products = pgTable("products", {
   name: text("name").notNull(),
   description: text("description").notNull(),
   category: text("category").notNull(),
-  price: doublePrecision("price").notNull(),
+  price: doublePrecision("price").notNull(), // Price in KES (Kenyan Shillings)
   quantity: integer("quantity").notNull(),
   unit: text("unit").notNull(), // kg, piece, dozen, etc.
   imageUrl: text("image_url"),
   sellerId: integer("seller_id").notNull(),
   available: boolean("available").notNull().default(true),
+  location: text("location"), // Farm location in Kenya
+  county: text("county"), // Kenyan county where the product is produced
+  organic: boolean("organic").default(false), // Whether the product is organic
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -35,9 +41,12 @@ export const orders = pgTable("orders", {
   id: serial("id").primaryKey(),
   buyerId: integer("buyer_id").notNull(),
   status: text("status").notNull().default("pending"), // pending, processing, shipped, delivered, cancelled
-  totalAmount: doublePrecision("total_amount").notNull(),
+  totalAmount: doublePrecision("total_amount").notNull(), // Amount in KES
   shippingAddress: text("shipping_address").notNull(),
-  paymentMethod: text("payment_method").notNull(),
+  county: text("county").notNull(), // Kenyan county for delivery
+  paymentMethod: text("payment_method").notNull(), // mpesa, cash, bank_transfer
+  mpesaReceiptNumber: text("mpesa_receipt_number"), // M-Pesa confirmation code
+  deliveryNotes: text("delivery_notes"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
