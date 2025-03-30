@@ -49,11 +49,11 @@ export default function Navbar() {
   return (
     <header className="bg-background border-b sticky top-0 z-40">
       <div className="container mx-auto px-4">
-        <div className="flex h-20 items-center justify-between">
+        <div className="flex h-24 items-center justify-between">
           <div className="flex items-center">
             <Link href="/">
               <div className="flex items-center">
-                <img src={logoImg} alt="FarmLinker Logo" className="h-16 w-auto" />
+                <img src={logoImg} alt="FarmLinker Logo" className="h-20 w-auto" />
               </div>
             </Link>
             
@@ -152,7 +152,7 @@ export default function Navbar() {
               <SheetContent side="right">
                 <SheetHeader className="mb-6">
                   <SheetTitle className="flex items-center justify-center">
-                    <img src={logoImg} alt="FarmLinker Logo" className="h-14 w-auto" />
+                    <img src={logoImg} alt="FarmLinker Logo" className="h-20 w-auto" />
                   </SheetTitle>
                 </SheetHeader>
                 <div className="flex flex-col space-y-4">

@@ -15,7 +15,7 @@ export default function Footer() {
           <div className="space-y-4">
             <Link href="/">
               <div className="flex flex-col items-center md:items-start">
-                <img src={logoImg} alt="FarmLinker Logo" className="h-20 w-auto mb-2" />
+                <img src={logoImg} alt="FarmLinker Logo" className="h-28 w-auto mb-2" />
                 <h2 className="text-xl font-bold text-primary mt-2">FarmLinker</h2>
               </div>
             </Link>
