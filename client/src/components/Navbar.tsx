@@ -104,12 +104,20 @@ export default function Navbar() {
                   </Link>
                   
                   {isSeller && (
-                    <Link href="/seller/dashboard">
-                      <DropdownMenuItem className="cursor-pointer">
-                        <Package className="mr-2 h-4 w-4" />
-                        <span>Seller Dashboard</span>
-                      </DropdownMenuItem>
-                    </Link>
+                    <>
+                      <Link href="/seller/dashboard">
+                        <DropdownMenuItem className="cursor-pointer">
+                          <Package className="mr-2 h-4 w-4" />
+                          <span>Seller Dashboard</span>
+                        </DropdownMenuItem>
+                      </Link>
+                      <Link href="/seller/products">
+                        <DropdownMenuItem className="cursor-pointer">
+                          <ShoppingBag className="mr-2 h-4 w-4" />
+                          <span>Manage Products</span>
+                        </DropdownMenuItem>
+                      </Link>
+                    </>
                   )}
                   
                   <DropdownMenuSeparator />
@@ -168,16 +176,28 @@ export default function Navbar() {
                         </Button>
                       </Link>
                       {isSeller && (
-                        <Link href="/seller/dashboard">
-                          <Button
-                            variant="ghost"
-                            className="w-full justify-start"
-                            onClick={() => setMobileMenuOpen(false)}
-                          >
-                            <Package className="mr-2 h-4 w-4" />
-                            Seller Dashboard
-                          </Button>
-                        </Link>
+                        <>
+                          <Link href="/seller/dashboard">
+                            <Button
+                              variant="ghost"
+                              className="w-full justify-start"
+                              onClick={() => setMobileMenuOpen(false)}
+                            >
+                              <Package className="mr-2 h-4 w-4" />
+                              Seller Dashboard
+                            </Button>
+                          </Link>
+                          <Link href="/seller/products">
+                            <Button
+                              variant="ghost"
+                              className="w-full justify-start"
+                              onClick={() => setMobileMenuOpen(false)}
+                            >
+                              <ShoppingBag className="mr-2 h-4 w-4" />
+                              Manage Products
+                            </Button>
+                          </Link>
+                        </>
                       )}
                       <Button
                         variant="ghost"

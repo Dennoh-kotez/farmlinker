@@ -170,7 +170,22 @@ export default function Dashboard() {
         
         {/* Quick Actions */}
         <h2 className="text-2xl font-bold mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Browse Products</CardTitle>
+              <CardDescription>Explore farm products from Kenyan farmers</CardDescription>
+            </CardHeader>
+            <CardFooter>
+              <Link href="/products" className="w-full">
+                <Button className="w-full">
+                  <ShoppingBag className="mr-2 h-4 w-4" />
+                  Browse Products
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
+          
           <Card>
             <CardHeader>
               <CardTitle>Profile</CardTitle>

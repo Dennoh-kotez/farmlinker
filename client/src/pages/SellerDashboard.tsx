@@ -41,10 +41,10 @@ export default function SellerDashboard() {
             <div className="bg-muted px-3 py-1 rounded-md text-sm">
               <span className="font-medium">KES Balance:</span> 0.00
             </div>
-            <Link href="/seller/products/add">
+            <Link href="/seller/products">
               <Button>
                 <PlusCircle className="mr-2 h-4 w-4" />
-                Add New Product
+                Manage Products
               </Button>
             </Link>
           </div>
@@ -124,10 +124,10 @@ export default function SellerDashboard() {
                   <p className="text-muted-foreground mb-4">
                     You haven't added any products to your store yet. Start by adding your first product.
                   </p>
-                  <Link href="/seller/products/add">
+                  <Link href="/seller/products">
                     <Button>
                       <PlusCircle className="mr-2 h-4 w-4" />
-                      Add First Product
+                      Manage Products
                     </Button>
                   </Link>
                 </div>
@@ -288,14 +288,14 @@ export default function SellerDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle>Add Product</CardTitle>
-              <CardDescription>List a new farm product for sale</CardDescription>
+              <CardTitle>Manage Products</CardTitle>
+              <CardDescription>Add and manage your farm products</CardDescription>
             </CardHeader>
             <CardFooter>
-              <Link href="/seller/products/add" className="w-full">
+              <Link href="/seller/products" className="w-full">
                 <Button variant="outline" className="w-full">
                   <PlusCircle className="mr-2 h-4 w-4" />
-                  Add Product
+                  Manage Products
                 </Button>
               </Link>
             </CardFooter>
