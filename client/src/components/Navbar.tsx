@@ -53,8 +53,8 @@ export default function Navbar() {
           <div className="flex items-center">
             <Link href="/">
               <div className="flex items-center">
-                <img src={logoImg} alt="FarmLinker Logo" className="h-10 w-auto mr-2" />
-                <span className="text-2xl font-bold text-primary cursor-pointer">FarmLinker</span>
+                <img src={logoImg} alt="KilimoConnect Logo" className="h-14 w-auto mr-2" />
+                <span className="text-2xl font-bold text-primary cursor-pointer">KilimoConnect</span>
               </div>
             </Link>
             
@@ -153,8 +153,8 @@ export default function Navbar() {
               <SheetContent side="right">
                 <SheetHeader className="mb-6">
                   <SheetTitle className="flex items-center">
-                    <img src={logoImg} alt="FarmLinker Logo" className="h-8 w-auto mr-2" />
-                    <span>FarmLinker</span>
+                    <img src={logoImg} alt="KilimoConnect Logo" className="h-12 w-auto mr-2" />
+                    <span>KilimoConnect</span>
                   </SheetTitle>
                 </SheetHeader>
                 <div className="flex flex-col space-y-4">

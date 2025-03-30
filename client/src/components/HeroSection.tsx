@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import farmBgImg from "@assets/farmbg.png";
 
 export default function HeroSection() {
   return (
@@ -13,11 +14,11 @@ export default function HeroSection() {
             transition={{ duration: 0.5 }}
           >
             <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl">
-              <span className="block">The Future of</span>
-              <span className="block text-primary">Product Innovation</span>
+              <span className="block">Connecting Farmers</span>
+              <span className="block text-primary">With Kenya's Markets</span>
             </h1>
             <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-              LaunchPad helps teams build better products faster. Our intuitive platform streamlines your workflow, enhances collaboration, and accelerates your time to market.
+              KilimoConnect brings farmers and buyers together for fresher food and fairer prices. Our marketplace creates direct connections that benefit both producers and consumers in Kenya.
             </p>
             <div className="mt-8 sm:mt-10">
               <div className="rounded-md shadow">
@@ -28,7 +29,7 @@ export default function HeroSection() {
                 </a>
               </div>
               <div className="mt-3 sm:mt-4">
-                <p className="text-sm text-gray-500">Be among the first to experience LaunchPad</p>
+                <p className="text-sm text-gray-500">Join Kenya's fastest growing agricultural marketplace</p>
               </div>
             </div>
           </motion.div>
@@ -40,8 +41,8 @@ export default function HeroSection() {
           >
             <div className="bg-white sm:max-w-md sm:w-full sm:mx-auto sm:rounded-lg sm:overflow-hidden shadow-xl">
               <img 
-                src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                alt="Team collaborating on a project using LaunchPad"
+                src={farmBgImg} 
+                alt="Kenyan farm with crops and produce"
                 className="w-full object-cover rounded-lg"
               />
             </div>
@@ -53,22 +54,22 @@ export default function HeroSection() {
           <div className="w-full border-t border-gray-200"></div>
         </div>
         <div className="relative flex justify-center mt-16 sm:mt-24">
-          <span className="px-3 bg-gray-50 text-lg font-medium text-gray-500">Trusted by innovative teams</span>
+          <span className="px-3 bg-gray-50 text-lg font-medium text-gray-500">Trusted across Kenya</span>
         </div>
       </div>
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           <div className="col-span-1 flex justify-center items-center">
-            <div className="text-gray-400 font-semibold">Company A</div>
+            <div className="text-gray-400 font-semibold">Nairobi</div>
           </div>
           <div className="col-span-1 flex justify-center items-center">
-            <div className="text-gray-400 font-semibold">Company B</div>
+            <div className="text-gray-400 font-semibold">Mombasa</div>
           </div>
           <div className="col-span-1 flex justify-center items-center">
-            <div className="text-gray-400 font-semibold">Company C</div>
+            <div className="text-gray-400 font-semibold">Kisumu</div>
           </div>
           <div className="col-span-1 flex justify-center items-center">
-            <div className="text-gray-400 font-semibold">Company D</div>
+            <div className="text-gray-400 font-semibold">Nakuru</div>
           </div>
         </div>
       </div>
