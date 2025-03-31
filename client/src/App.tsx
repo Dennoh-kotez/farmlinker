@@ -9,6 +9,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import SellerDashboard from "./pages/SellerDashboard";
 import Products from "./pages/Products";
+import About from "./pages/About";
 import SellerProducts from "./pages/SellerProducts";
 import { AuthProvider } from "./contexts/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
@@ -22,6 +23,7 @@ function Router() {
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
       <Route path="/products" component={Products} />
+      <Route path="/about" component={About} />
       
       {/* Buyer Routes (authenticated) */}
       <Route path="/dashboard">
